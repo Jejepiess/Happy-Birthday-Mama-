@@ -60,7 +60,6 @@
       100% { transform: scale(1); }
     }
 
-    /* Floating hearts */
     .hearts {
       position: absolute;
       width: 100%;
@@ -73,8 +72,6 @@
 
     .heart {
       position: absolute;
-      width: 20px;
-      height: 20px;
       background-color: #ff7fa2;
       transform: rotate(45deg);
       animation: float 10s linear infinite;
@@ -85,8 +82,6 @@
     .heart::after {
       content: "";
       position: absolute;
-      width: 20px;
-      height: 20px;
       background-color: #ff7fa2;
       border-radius: 50%;
     }
@@ -102,36 +97,58 @@
     }
 
     @keyframes float {
+      0% { transform: translateY(100vh) rotate(45deg); }
+      100% { transform: translateY(-10vh) rotate(45deg); }
+    }
+
+    /* Overlay */
+    #overlay {
+      position: fixed;
+      inset: 0;
+      background: #ffdee9;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2em;
+      color: #d6336c;
+      z-index: 9999;
+      cursor: pointer;
+      text-align: center;
+      padding: 20px;
+    }
+
+    /* Sparkles */
+    .sparkle {
+      position: absolute;
+      width: 6px;
+      height: 6px;
+      background: white;
+      border-radius: 50%;
+      box-shadow: 0 0 8px white;
+      animation: sparkleMove 3s linear infinite;
+    }
+
+    @keyframes sparkleMove {
       0% {
-        transform: translateY(100vh) rotate(45deg);
+        transform: translateY(0) scale(1);
+        opacity: 1;
       }
       100% {
-        transform: translateY(-10vh) rotate(45deg);
+        transform: translateY(-100vh) scale(0.5);
+        opacity: 0;
       }
     }
   </style>
 </head>
 <body>
 
-  <!-- Background Music -->
-  <audio autoplay loop>
-    <source src="happy-birthday-220024.mp3" type="audio/mpeg">
-    Your browser does not support the audio element.
-  </audio>
-
-  <!-- Floating Hearts -->
-  <div class="hearts">
-    <script>
-      for (let i = 0; i < 30; i++) {
-        let heart = document.createElement('div');
-        heart.className = 'heart';
-        heart.style.left = Math.random() * 100 + 'vw';
-        heart.style.animationDuration = 5 + Math.random() * 10 + 's';
-        heart.style.width = heart.style.height = 10 + Math.random() * 20 + 'px';
-        document.querySelector('.hearts').appendChild(heart);
-      }
-    </script>
+  <!-- Overlay -->
+  <div id="overlay" onclick="startPage()">
+    💖 Tap anywhere to start the surprise 💖
   </div>
+
+  <!-- Hearts -->
+  <div class="hearts"></div>
 
   <!-- Main Content -->
   <div class="container">
@@ -139,5 +156,48 @@
     <img src="Happy Birthday mama.jpg" alt="Mama" class="photo" />
   </div>
 
+  <!-- Music & Confetti Logic -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <script>
+    const music = new Audio("happy-birthday-220024.mp3");
+    music.loop = true;
+
+    function startPage() {
+      document.getElementById('overlay').style.display = 'none';
+      music.play();
+
+      // Confetti burst
+      confetti({
+        particleCount: 200,
+        spread: 100,
+        origin: { y: 0.6 }
+      });
+
+      // Extra confetti every 2s for fun
+      setTimeout(() => {
+        confetti({ particleCount: 100, spread: 70 });
+      }, 1000);
+
+      // Sparkles
+      for (let i = 0; i < 30; i++) {
+        const s = document.createElement('div');
+        s.className = 'sparkle';
+        s.style.left = Math.random() * 100 + 'vw';
+        s.style.top = Math.random() * 100 + 'vh';
+        s.style.animationDuration = (2 + Math.random() * 2) + 's';
+        document.body.appendChild(s);
+      }
+    }
+
+    // Generate hearts
+    for (let i = 0; i < 30; i++) {
+      let heart = document.createElement('div');
+      heart.className = 'heart';
+      heart.style.left = Math.random() * 100 + 'vw';
+      heart.style.animationDuration = 5 + Math.random() * 10 + 's';
+      heart.style.width = heart.style.height = 10 + Math.random() * 20 + 'px';
+      document.querySelector('.hearts').appendChild(heart);
+    }
+  </script>
 </body>
 </html>
