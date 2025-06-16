@@ -164,39 +164,43 @@
     music.loop = true;
 
     function startPage() {
+      // Hide overlay right away
       document.getElementById('overlay').style.display = 'none';
 
-      // Play music
+      // Start playing music
       music.play().then(() => {
         console.log("Music is playing!");
       }).catch((e) => {
         console.error("Autoplay blocked:", e);
       });
 
-      // Confetti burst
-      confetti({
-        particleCount: 200,
-        spread: 100,
-        origin: { y: 0.6 }
-      });
-
-      // Additional burst
+      // Delay surprise by 2.5 seconds
       setTimeout(() => {
-        confetti({ particleCount: 100, spread: 70 });
-      }, 1000);
+        // Confetti burst
+        confetti({
+          particleCount: 200,
+          spread: 100,
+          origin: { y: 0.6 }
+        });
 
-      // Sparkles
-      for (let i = 0; i < 30; i++) {
-        const s = document.createElement('div');
-        s.className = 'sparkle';
-        s.style.left = Math.random() * 100 + 'vw';
-        s.style.top = Math.random() * 100 + 'vh';
-        s.style.animationDuration = (2 + Math.random() * 2) + 's';
-        document.body.appendChild(s);
-      }
+        // Second burst
+        setTimeout(() => {
+          confetti({ particleCount: 100, spread: 70 });
+        }, 1000);
+
+        // Sparkles
+        for (let i = 0; i < 30; i++) {
+          const s = document.createElement('div');
+          s.className = 'sparkle';
+          s.style.left = Math.random() * 100 + 'vw';
+          s.style.top = Math.random() * 100 + 'vh';
+          s.style.animationDuration = (2 + Math.random() * 2) + 's';
+          document.body.appendChild(s);
+        }
+      }, 2500); // Delay in milliseconds
     }
 
-    // Floating hearts
+    // Floating hearts (run on page load)
     for (let i = 0; i < 30; i++) {
       let heart = document.createElement('div');
       heart.className = 'heart';
@@ -208,3 +212,4 @@
   </script>
 </body>
 </html>
+
