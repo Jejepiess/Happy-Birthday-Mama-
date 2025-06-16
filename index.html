@@ -101,7 +101,7 @@
       100% { transform: translateY(-10vh) rotate(45deg); }
     }
 
-    /* Overlay */
+    /* Tap-to-start overlay */
     #overlay {
       position: fixed;
       inset: 0;
@@ -142,29 +142,36 @@
 </head>
 <body>
 
-  <!-- Overlay -->
+  <!-- Tap to Start -->
   <div id="overlay" onclick="startPage()">
     💖 Tap anywhere to start the surprise 💖
   </div>
 
-  <!-- Hearts -->
+  <!-- Floating Hearts -->
   <div class="hearts"></div>
 
-  <!-- Main Content -->
+  <!-- Main Greeting -->
   <div class="container">
     <h1>Happy Birthday Mama!<br><small>missusomuch</small></h1>
     <img src="Happy Birthday mama.jpg" alt="Mama" class="photo" />
   </div>
 
-  <!-- Music & Confetti Logic -->
+  <!-- Confetti Script -->
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
   <script>
     const music = new Audio("happy-birthday-220024.mp3");
     music.loop = true;
 
     function startPage() {
       document.getElementById('overlay').style.display = 'none';
-      music.play();
+
+      // Play music
+      music.play().then(() => {
+        console.log("Music is playing!");
+      }).catch((e) => {
+        console.error("Autoplay blocked:", e);
+      });
 
       // Confetti burst
       confetti({
@@ -173,7 +180,7 @@
         origin: { y: 0.6 }
       });
 
-      // Extra confetti every 2s for fun
+      // Additional burst
       setTimeout(() => {
         confetti({ particleCount: 100, spread: 70 });
       }, 1000);
@@ -189,7 +196,7 @@
       }
     }
 
-    // Generate hearts
+    // Floating hearts
     for (let i = 0; i < 30; i++) {
       let heart = document.createElement('div');
       heart.className = 'heart';
